@@ -1,0 +1,12 @@
+__pycache__
+.settings
+.vscode
+target
+queue_*.csv
+shards_queue_*.csv
+sweep_*.html
+temp*
+shardcost
+*.out
+mq.10k.clean.or.rankcost
+.DS_Store
