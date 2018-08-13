@@ -77,16 +77,22 @@ public class QuerySelectionEndEvent extends EventOf2Entities<QueryResourceSelect
                         dest = m;
                     }
                 }
+                shard.expected = shard.time+min;
+                query.maxCost = Math.max(shard.expected, query.maxCost);
                 shard.setDestination(dest);
+                thread.machine.sendMessage(shard);
                 // find the actual machine id based on the mirror version of the resource selection machine
             } else {
                 String machinePrefix = owner.getMachinePrefix(shard.shard);
                 // find the actual machine id based on the mirror version of the resource selection machine
                 String machineId = machinePrefix + "." + thread.machine.mirror;
                 shard.setDestination(owner.machineMap.get(machineId));
+                thread.machine.sendMessage(shard);
             }
-            thread.machine.sendMessage(shard);
         }
+        // if (owner.DISPATCH_STRATEGY == 1) {
+        //     for(QueryShardSearchTask shard: query.searchTasks) thread.machine.sendMessage(shard);
+        // }
     }
   }
 

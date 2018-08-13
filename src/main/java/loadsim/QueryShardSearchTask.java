@@ -37,7 +37,8 @@ public class QueryShardSearchTask extends QueryTask {
   public Machine destMachine;
   public long cost;
   public double time;
-  public double optimal;
+//   public double optimal;
+  public double expected;
   public boolean done = false;
   public double shardArrivalTime;
   public double shardStartTime;

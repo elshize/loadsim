@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import wasserstein_distance
 import argparse, pandas as pd
 
-queueType=4
+queueType=5
 modeNum=5
 queryArrivalRate=400
 coreNum=64
@@ -87,7 +87,7 @@ def plot():
     fig, all_axs = plt.subplots(modeNum, queueType+1, sharey=True, tight_layout=True)
     n_bins = 20
 
-    files = ["queue_st.csv", "queue_sc.csv", "queue_nd.csv", "queue_mnd.csv"]
+    files = ["queue_st.csv", "queue_sc.csv", "queue_nd.csv", "queue_mnd.csv", "queue_tmnd.csv"]
     titles = [
         "End-to-End time",
         "Query search queue time",
@@ -102,6 +102,7 @@ def plot():
     for m in range(0, modeNum):
         ys = target + list(map(lambda x: parse(x, m), files))
         ws = []
+        if m == 4: print('--------------------------------')
         for i, y in enumerate(ys):
             y = np.array(y)
             if m == 0 and i != 0: ws.append("{:.4f}".format(wasserstein_distance(y, ys[0])))
@@ -125,6 +126,8 @@ def plot():
                     # µ = (df.iloc[r, 7] - df.iloc[l, 7])*queryArrivalRate/(r-l)/1000
                     µ = queryArrivalRate/1000 * data[0] / coreNum
                     d = (*d, "{:.4f}".format(µ))
+                print((['optimal.csv']+files)[i], '', *d)
+            elif m == 4:
                 print((['optimal.csv']+files)[i], '', *d)
             axs.legend(["{:.2f}".format(x) for x in data])
 
