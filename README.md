@@ -32,6 +32,42 @@ To get the latency distribution run:
 
 To get the trailing average, scatter graph and more, run `plotter.py` after uncommenting the corresponding function calls.
 
+### Params
+
+There are currently three dispatching five queuing strategies implemented.
+
+Implementations of queues can be found in `Machine.java` and those of routing strategies' can be found in `QuerySelectionEndEvent.java`
+
+    DISPATCH_STRATEGY = 0:  Select a machine randomly from machines that have idle threads and dispatch
+    
+    DISPATCH_STRATEGY = 1:  Select a machine that has the lowest expected wait time
+
+    DISPATCH_STRATEGY = 2:  Calculate query optimal by computing the maximum of the sum of 
+                            shard.searchTime and shortest machine.waitTime
+                            Schdule ShardSearchTask to a machine that maximizes machine.waitTime while
+                            satifying the constraint that shard.searchTime+machine.waitTime <= queryOptimal
+
+    queueOrder = 0:         FIFO
+    
+    queueOrder = 1:         Least Cost First
+
+    queueOrder = 2:         Earliest Deadline First
+                            deadline = query.searchArrivalTime + shard.searchTime
+
+    queueOrder = 3:         deadline = query.searchArrivalTime + shard.queryOptimal
+
+    queueOrder = 4:         FIFO with task swapping
+                            Shard        S:     incoming shard search task
+                            Queue<Shard> Q[N]:  machine search queue of length N
+                            Start from the end the the queue, i = N
+                            Let Q[i].expected = Q[i].searchTime + machine.waitTime
+                            While Q[i].expected + S.searchTime <= Q[i].query.optimal:
+                                swap; --i; Q[i].expected+=S.searchTime;
+                            else:
+                                insert at Q[i];
+      
+
+
 ### More Info
 
 You can also run the simulator with a random seed:

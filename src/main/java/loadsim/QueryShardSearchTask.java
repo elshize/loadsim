@@ -22,7 +22,7 @@ public class QueryShardSearchTask extends QueryTask {
     this.shard = shard;
     //this.destMachine = destMachine; // machine where the shard to be searched is located
     this.cost = cost; // cost in posting lists
-    this.time = SearchLoadModel.convertCostToTime(cost, query);
+    this.searchTime = SearchLoadModel.convertCostToTime(cost, query);
   }
   
   public void process(JobThread thread) {
@@ -36,7 +36,7 @@ public class QueryShardSearchTask extends QueryTask {
   public String shard;
   public Machine destMachine;
   public long cost;
-  public double time;
+  public double searchTime;
 //   public double optimal;
   public double expected;
   public boolean done = false;
