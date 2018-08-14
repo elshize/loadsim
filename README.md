@@ -1,12 +1,5 @@
 # Loadsim
 
-## Disclaimer
-
-This repository is based on the following code: http://boston.lti.cs.cmu.edu/appendices/jir17-yubink/loadsim
-related to the following paper:
-
-_Kim, Yubin, Jamie Callan, J. Shane Culpepper, and Alistair Moffat. "Load-balancing in distributed selective search." In Proceedings of the 39th international ACM SIGIR conference on research and development in information retrieval, pp. 905-908. ACM, 2016._
-
 ## Introduction
 
 This repository contains a discrete event simulator (developed based the one used in the paper [Efficient Distributed Selective Search](http://boston.lti.cs.cmu.edu/appendices/jir17-yubink/loadsim/)) for simulating the performance of the different queues and query routing strategies.
