@@ -28,6 +28,9 @@ public class CSVWriter {
             case 3:
                 this.filename = "queue_mnd.csv";
                 break;
+            case 4:
+                this.filename = "queue_tmnd.csv";
+                break;
             default:
                 this.filename = "queue_st.csv";
         }

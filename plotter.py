@@ -80,7 +80,7 @@ def plot_trailing():
         axes[index].set_title(files[index])
     plt.show()
 
-# plot_trailing()
+plot_trailing()
 
 
 
@@ -116,4 +116,4 @@ def plot_shard_waittime(file):
     axes.get_xaxis().set_visible(False)
     plt.show()
 
-plot_shard_waittime('shards_queue_st.csv')
+# plot_shard_waittime('shards_queue_st.csv')

@@ -1,12 +1,12 @@
 numThreads=8,8,8,8,8,8,8,8
 machineIds=0,1,2,3,4,5,6,7
 numSelectMachines=8
-mirrors=1
-queryArrivalRate=400
+mirrors=2
+queryArrivalRate=1000
 shardMappingFile=shardmap.out
 queryListFile=shardcost.out
 monitorLoad=True
 exhaustiveSearch=False
-queueOrder=2
-randomSeed=67
-dispatchStrategy=2
+queueOrder=4
+randomSeed=357
+dispatchStrategy=1

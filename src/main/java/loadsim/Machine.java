@@ -206,28 +206,41 @@ public class Machine extends Entity {
   public void queueTask(QueryTask task) {
     assert (task.getDestination() == this);
     if (task instanceof QueryMergeTask) {
-        task.setQueuingPriority(200000 - (int) task.getQuery().getArrivalTime());
+        // task.setQueuingPriority(200000 - (int) task.getQuery().getArrivalTime());
         mergeQueue.insert((QueryMergeTask) task);
       if (task.getQuery().trackQuery()) {
         mergeQueueTally.update(mergeQueue.size());
       }
     } else if (task instanceof QueryShardSearchTask) {
-      if (owner.queueOrder > 0) {
-        int cost = (int) (
-            SearchLoadModel.convertCostToTime(((QueryShardSearchTask) task).cost, task.getQuery())
-        );
-        int priority = owner.queueOrder > 2 ? (int) task.getQuery().maxCost : cost;
-        if (owner.queueOrder == 2) priority+=(int) task.getQuery().getSearchArrivalTime();
-        // if (owner.queueOrder == 3 && priority == cost) priority=0;
-        task.setQueuingPriority(20000-priority);
-      }
-      searchQueue.insert((QueryShardSearchTask) task);
-      if (task.getQuery().trackQuery()) {
-        searchQueueTally.update(searchQueue.size());
-      }
-      searchQueueSizeUpdate(task, true);
+        if (owner.queueOrder == 4) {
+            QueryShardSearchTask curr = searchQueue.last();
+            if (curr != null) {
+                Double time = ((QueryShardSearchTask) task).time;
+                while(curr != null && (curr.expected + time <= curr.getQuery().maxCost)) {
+                    curr.expected+=time;
+                    curr=searchQueue.pred(curr);
+                }
+                if (curr == null) searchQueue.insertBefore(((QueryShardSearchTask) task), searchQueue.first());
+                else searchQueue.insertAfter(((QueryShardSearchTask) task), curr);
+            } else searchQueue.insert((QueryShardSearchTask) task);
+        } else {
+            if (owner.queueOrder > 0) {
+                int cost = (int) (
+                    SearchLoadModel.convertCostToTime(((QueryShardSearchTask) task).cost, task.getQuery())
+                );
+                int priority = owner.queueOrder == 3  ? (int) task.getQuery().maxCost : cost;
+                if (owner.queueOrder == 2) priority+=(int) task.getQuery().getSearchArrivalTime();
+                // if (owner.queueOrder == 3 && priority == cost) priority=0;
+                task.setQueuingPriority(20000-priority);
+            }
+            searchQueue.insert((QueryShardSearchTask) task);
+        }
+        if (task.getQuery().trackQuery()) {
+            searchQueueTally.update(searchQueue.size());
+        }
+        searchQueueSizeUpdate(task, true);
     } else {
-      throw new RuntimeException("Bad query task class for Machine#queueTask: " + task.getClass());
+        throw new RuntimeException("Bad query task class for Machine#queueTask: " + task.getClass());
     }
 
     // after getting a task, check if there are available resources

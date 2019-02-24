@@ -20,7 +20,7 @@ def query_last_shard(filename):
 
 def sc_mnd_diff():
     queue_sc = query_last_shard("queue_sc.csv")
-    queue_mnd = query_last_shard("queue_mnd.csv")
+    queue_mnd = query_last_shard("queue_tmnd.csv")
     print("{:4} {:6} {:6} {:6} {:6} {} {}".format('query_num', 'sc_search', 'mnd_search', 'sc_wait', 'mnd_wait', 'sc_index', 'mnd_index'))
     for i, (x, y, z, m) in enumerate(queue_sc):
         tx, ty, tz, tm = queue_mnd[i]

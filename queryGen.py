@@ -9,7 +9,7 @@ machineNum=8
 shardCopyNum=3
 shardSelected=5                 # shard selected for each query
 inputRepetition=2               # number of times the input is repeated
-infile="mq.10k.clean.or.rankcost"
+filename="mq.10k.clean.or.rankcost"
 
 cnt=0
 seed(randomSeed)
@@ -32,7 +32,7 @@ def getNextQuery():
 # selects top shards and generates query sequence
 with open("shardcost.out", "w") as outfile:
     for i in range(0,inputRepetition):
-        with open(infile, "r") as infile:
+        with open(filename, "r") as infile:
             outfile.write(getNextQuery())
             shards = 0
             for line in infile:
